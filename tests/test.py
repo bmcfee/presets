@@ -60,6 +60,23 @@ def test_revert():
     eq_(preset_test.mult(4), P.mult(4))
 
 
+def test_contains():
+
+    P = presets.Preset(preset_test)
+    P['b'] = 3
+
+    assert 'b' in P
+    assert 'c' not in P
+
+
+def test_set_get():
+
+    b = 20
+    P = presets.Preset(preset_test)
+    P['b'] = b
+
+    eq_(P['b'], b)
+
 
 def test_external():
     P = presets.Preset(preset_test)
