@@ -27,7 +27,7 @@ import os
 import six
 import types
 
-__version__ = '0.0.1'
+__version__ = '0.1.0'
 
 
 class Preset(object):
