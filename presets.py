@@ -67,7 +67,7 @@ class Preset(object):
                 setattr(self, attr, self.__wrap(value))
 
             # If it's a module, construct a parameterizer to wrap it
-            elif isinstance(attr, types.ModuleType):
+            elif isinstance(value, types.ModuleType):
                 # test if this is a submodule of the current module
                 submodpath = inspect.getfile(value)
 
