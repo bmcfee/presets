@@ -78,6 +78,27 @@ def test_set_get():
     eq_(P['b'], b)
 
 
+def test_update():
+
+    P = presets.Preset(preset_test)
+
+    params = dict(b=30, c=20, d=50)
+    P.update(params)
+
+    for key in params.keys():
+        eq_(P[key], params[key])
+
+
+def test_keys():
+
+    P = presets.Preset(preset_test)
+
+    params = dict(b=30, c=20, d=50)
+    P.update(params)
+
+    eq_(set(P.keys()), set(params.keys()))
+
+
 def test_external():
     P = presets.Preset(preset_test)
 
