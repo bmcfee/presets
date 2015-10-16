@@ -1,7 +1,25 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-'''Presets provides an object interface to a module which can override the default parameter values.
+'''Presets provides an object interface to a module which can override
+the default parameter values.
 
+This is primarily useful for packages which contain many functions with overlapping
+parameter sets.  Presets can be used to consistently override all defaults at once,
+while maintaining the same externally-facing API.
+
+Example
+-------
+This example shows how to override common default parameters in the librosa package.
+
+>>> import librosa as _librosa
+>>> from presets import Preset
+>>> librosa = Preset(_librosa)
+>>> librosa['sr'] = 44100
+>>> librosa['n_fft'] = 4096
+>>> librosa['hop_length'] = 1024
+>>> y, sr = librosa.load(librosa.util.example_audio_file())
+>>> stft = librosa.stft(y)
+>>> tempo, beats = librosa.beat.beat_track(y)
 '''
 
 import inspect
@@ -13,11 +31,41 @@ __version__ = '0.0.1'
 
 
 class Preset(object):
+    '''The Preset class overrides the default parameters of functions within a module.
+
+    If the given module contains submodules, these are also encapsulated by Preset objects
+    that share the same default parameter dictionary.
+
+    Submodules are detected by examining common prefixes of the module source paths.
+
+    Attributes
+    ----------
+    module : Python module
+        The module to encapsulate
+
+    dispatch : None or dictionary
+        A dictionary mapping modules to existing Preset objects.
+        This should be left as `None` for most situations.
+
+    defaults : None or dictionary
+        An existing dictionary object used to collect default parameters.
+        Note: this will be passed by reference.
+    '''
 
     def __wrap(self, func):
+        '''This decorator overrides the default arguments of a function.
+
+        For each keyword argument in the function, the decorator first checks
+        if the argument has been overridden by the caller, and uses that value instead if so.
+
+        If not, the decorator consults the Preset object for an override value.
+
+        If both of the above cases fail, the decorator reverts to the function's native
+        default parameter value.
+        '''
 
         def deffunc(*args, **kwargs):
-
+            '''The decorated function'''
             # Get the list of function arguments
             function_args = inspect.getargspec(func).args
 
@@ -36,7 +84,7 @@ class Preset(object):
                     filtered_kwargs[param] = self._defaults[param]
 
             # Call the function with the supplied args and the filtered kwarg dict
-            return func(*args, **filtered_kwargs)
+            return func(*args, **filtered_kwargs) # pylint: disable=W0142
 
         return deffunc
 
@@ -96,12 +144,12 @@ class Preset(object):
         return param in self._defaults
 
     def __setitem__(self, param, value):
-
         self._defaults[param] = value
 
     def keys(self):
+        '''Returns a list of currently set parameter defaults'''
         return self._defaults.keys()
 
     def update(self, D):
-
+        '''Updates the default parameter set by a dictionary D'''
         self._defaults.update(D)
