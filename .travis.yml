@@ -1,0 +1,39 @@
+sudo: false
+
+cache:
+  directories:
+  - $HOME/env
+
+language: python
+
+notifications:
+  email: false
+
+python:
+    - "2.7"
+    - "3.4"
+
+before_install:
+    - bash .travis_dependencies.sh
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+        export PATH="$HOME/env/miniconda2/bin:$PATH";
+      else
+        export PATH="$HOME/env/miniconda3/bin:$PATH";
+      fi
+    - hash -r
+    - source activate test-environment
+
+install:
+    # install your own package into the environment
+    # pip install -e rather than setup.py, so that coverage can find the source
+    - pip install -e ./
+
+script:
+    - nosetests --with-coverage --cover-erase --cover-package=presets -v -w tests/
+
+after_success:
+    - coveralls
+    - pip uninstall -y presets
+
+after_failure:
+    - pip uninstall -y presets
