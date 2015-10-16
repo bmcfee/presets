@@ -26,5 +26,8 @@ setup(
     ],
     keywords='default parameter',
     license='ISC',
-    install_requires=['six']
+    install_requires=['six'],
+    extras_require={
+        'docs': ['numpydoc']
+    }
 )
