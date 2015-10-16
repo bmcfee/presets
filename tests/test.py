@@ -42,6 +42,16 @@ def test_main_update():
     P['b'] = b + 10
     eq_(preset_test.mult(4, b=b+10), P.mult(4))
 
+
+def test_user_override():
+    b = -3
+
+    P = presets.Preset(preset_test)
+    P['b'] = b
+    eq_(preset_test.mult(4, b=10 + b), P.mult(4, b=10 + b))
+
+
+
 def test_external():
     P = presets.Preset(preset_test)
 
