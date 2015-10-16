@@ -1,7 +1,7 @@
 .. _api:
 
-Using Preset
-============
+Object reference
+================
 
 .. module:: presets
 
