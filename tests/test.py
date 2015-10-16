@@ -51,6 +51,15 @@ def test_user_override():
     eq_(preset_test.mult(4, b=10 + b), P.mult(4, b=10 + b))
 
 
+def test_revert():
+    b = -3
+
+    P = presets.Preset(preset_test)
+    P['b'] = b
+    del P['b']
+    eq_(preset_test.mult(4), P.mult(4))
+
+
 
 def test_external():
     P = presets.Preset(preset_test)
