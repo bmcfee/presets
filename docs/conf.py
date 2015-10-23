@@ -62,9 +62,9 @@ copyright = u'2015, Brian McFee'
 #
 # The short X.Y version.
 import imp
-PRESETS = imp.load_source('presets', '../presets.py')
+PRESETS = imp.load_source('presets.version', '../presets/version.py')
 
-version = PRESETS.__version__
+version = PRESETS.version
 
 # The full version, including alpha/beta/rc tags.
 release = version
