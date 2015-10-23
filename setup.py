@@ -1,12 +1,11 @@
 from setuptools import setup, find_packages
 
-import imp
-
-PRESETS = imp.load_source('presets', 'presets.py')
+import pkg_resources
+version = pkg_resources.require('presets')[0].version
 
 setup(
     name='presets',
-    version=PRESETS.__version__,
+    version=version,
     description="A python module to manipulate default parameters of a module's functions",
     author='Brian McFee',
     url='http://github.com/bmcfee/presets',
