@@ -27,8 +27,7 @@ import os
 import six
 import types
 
-__version__ = '0.1.0'
-
+from .version import version as __version__
 
 class Preset(object):
     '''The Preset class overrides the default parameters of functions within a module.

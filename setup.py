@@ -1,11 +1,12 @@
 from setuptools import setup, find_packages
 
-import pkg_resources
-version = pkg_resources.get_distribution('presets').version
+import imp
+
+version = imp.load_source('presets.version', 'presets/version.py')
 
 setup(
     name='presets',
-    version=version,
+    version=version.version,
     description="A python module to manipulate default parameters of a module's functions",
     author='Brian McFee',
     url='http://github.com/bmcfee/presets',
@@ -22,6 +23,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
     ],
     keywords='default parameter',
     license='ISC',
