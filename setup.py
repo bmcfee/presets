@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 import pkg_resources
-version = pkg_resources.require('presets')[0].version
+version = pkg_resources.get_distribution('presets').version
 
 setup(
     name='presets',
