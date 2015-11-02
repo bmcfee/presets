@@ -69,7 +69,7 @@ class Preset(object):
             function_args = inspect.getargspec(func).args
 
             # Construct a dict of those kwargs which appear in the function
-            filtered_kwargs = {}
+            filtered_kwargs = kwargs.copy()
 
             # look at all relevant keyword arguments for this function
             for param in function_args:
