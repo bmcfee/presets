@@ -66,7 +66,12 @@ class Preset(object):
         def deffunc(*args, **kwargs):
             '''The decorated function'''
             # Get the list of function arguments
-            function_args = inspect.getargspec(func).args
+            if hasattr(inspect, 'signature'):
+                # Python 3.5
+                function_args = inspect.signature(func).parameters
+
+            else:
+                function_args = inspect.getargspec(func).args
 
             # Construct a dict of those kwargs which appear in the function
             filtered_kwargs = kwargs.copy()
