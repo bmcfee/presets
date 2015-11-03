@@ -36,17 +36,11 @@ API Reference
     :maxdepth: 3
 
     api
+    changes
 
 Contribute
 ----------
 - `Issue Tracker <http://github.com/bmcfee/presets/issues>`_
 - `Source Code <http://github.com/bmcfee/presets>`_
 
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
