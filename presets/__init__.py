@@ -119,7 +119,8 @@ class Preset(object):
                 setattr(self, attr, self.__wrap(value))
 
             # If it's a module, construct a parameterizer to wrap it
-            elif isinstance(value, types.ModuleType):
+            elif (isinstance(value, types.ModuleType) and
+                  hasattr(value, '__file__')):
                 # test if this is a submodule of the current module
                 submodpath = inspect.getfile(value)
 
@@ -136,7 +137,6 @@ class Preset(object):
                     setattr(self, attr, self._dispatch[value])
                 else:
                     setattr(self, attr, value)
-
 
     def __getitem__(self, param):
         return self._defaults[param]
