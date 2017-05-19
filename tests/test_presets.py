@@ -101,3 +101,9 @@ def test_external():
     P = presets.Preset(preset_test)
 
     assert preset_test.pickle == P.pickle
+
+
+def test_docstring():
+
+    P = presets.Preset(preset_test)
+    assert 'WARNING' in P.mult.__doc__
