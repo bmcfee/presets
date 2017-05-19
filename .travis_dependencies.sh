@@ -32,7 +32,7 @@ if [ ! -d "$src" ]; then
 
         source activate $ENV_NAME
 
-        pip install python-coveralls pytest-faulthandler
+        pip install python-coveralls pytest-cov pytest-faulthandler
             
         source deactivate
     popd
