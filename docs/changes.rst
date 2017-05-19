@@ -1,6 +1,11 @@
 Changes
 =======
 
+v0.1.3
+------
+- Fixed a bug in handling built-in modules
+- Added transparency of wrapped function docstrings and call signatures
+
 v0.1.2
 ------
 
