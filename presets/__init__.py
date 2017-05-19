@@ -27,6 +27,8 @@ import os
 import six
 import types
 
+import functools
+
 from .version import version as __version__
 
 class Preset(object):
@@ -88,9 +90,15 @@ class Preset(object):
                     filtered_kwargs[param] = self._defaults[param]
 
             # Call the function with the supplied args and the filtered kwarg dict
-            return func(*args, **filtered_kwargs) # pylint: disable=W0142
+            return func(*args, **filtered_kwargs)  # pylint: disable=W0142
 
-        return deffunc
+        wrapped = functools.update_wrapper(deffunc, func)
+
+        # force-mangle the docstring here
+        wrapped.__doc__ = ('WARNING: this function has been modified by the Presets '
+                           'package.\nDefault parameter values described in the '
+                           'documentation below may be inaccurate.\n\n{}'.format(wrapped.__doc__))
+        return wrapped
 
     def __init__(self, module, dispatch=None, defaults=None):
 
@@ -116,7 +124,9 @@ class Preset(object):
             # If it's a function, wrap it
             if six.callable(value):
                 # Wrap the function in a decorator
-                setattr(self, attr, self.__wrap(value))
+                wrapped = self.__wrap(value)
+
+                setattr(self, attr, wrapped)
 
             # If it's a module, construct a parameterizer to wrap it
             elif (isinstance(value, types.ModuleType) and
