@@ -11,7 +11,7 @@ conda_create ()
     conda update -q conda
     conda config --add channels pypi
     conda info -a
-    deps='six nose coverage'
+    deps=''
 
     conda create -q -n $ENV_NAME "python=$TRAVIS_PYTHON_VERSION" $deps
 }

@@ -32,6 +32,6 @@ setup(
     install_requires=['six'],
     extras_require={
         'docs': ['numpydoc'],
-        'tests': ['python-coveralls', 'pytest', 'pytest-cov', 'pytest-faulthandler']
+        'tests': ['coverage', 'python-coveralls', 'pytest', 'pytest-cov', 'pytest-faulthandler']
     }
 )
