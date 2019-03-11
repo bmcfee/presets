@@ -25,11 +25,13 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
     keywords='default parameter',
     license='ISC',
     install_requires=['six'],
     extras_require={
-        'docs': ['numpydoc']
+        'docs': ['numpydoc'],
+        'tests': ['coverage', 'python-coveralls', 'pytest', 'pytest-cov', 'pytest-faulthandler']
     }
 )
