@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-import imp
+import importlib
 
-version = imp.load_source('presets.version', 'presets/version.py')
+version = importlib.import_module('presets.version', 'presets/version.py')
 
 setup(
     name='presets',
