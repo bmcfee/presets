@@ -100,7 +100,7 @@ def test_keys():
 def test_external():
     P = presets.Preset(preset_test)
 
-    assert preset_test.pickle == P.pickle
+    assert preset_test.json == P.json
 
 
 def test_docstring():

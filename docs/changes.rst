@@ -1,6 +1,11 @@
 Changes
 =======
 
+v0.2.0
+------
+- Removed support for python < 3.8
+- Modernized to support python 3.13
+
 v0.1.3
 ------
 - Fixed a bug in handling built-in modules

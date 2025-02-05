@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Import an external module with a default kwarg
-import pickle
+import json
 
 # Import a submodule
 from . import submod
