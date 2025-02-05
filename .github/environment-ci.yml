@@ -1,0 +1,12 @@
+name: presets-dev
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # required
+  - pip
+
+  # optional, but required for testing
+  - pytest
+  - pytest-cov
+  - coverage

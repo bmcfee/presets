@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-'''Presets provides an object interface to a module which can override
+"""Presets provides an object interface to a module which can override \
 the default parameter values.
 
-This is primarily useful for packages which contain many functions with overlapping
-parameter sets.  Presets can be used to consistently override all defaults at once,
-while maintaining the same externally-facing API.
+This is primarily useful for packages which contain many functions with
+overlapping parameter sets.  Presets can be used to consistently override
+all defaults at once, while maintaining the same externally-facing API.
 
 Example
 -------
-This example shows how to override common default parameters in the librosa package.
+This example shows how to override common default parameters in the
+librosa package.
 
 >>> import librosa as _librosa
 >>> from presets import Preset
@@ -20,24 +21,29 @@ This example shows how to override common default parameters in the librosa pack
 >>> y, sr = librosa.load(librosa.util.example_audio_file())
 >>> stft = librosa.stft(y)
 >>> tempo, beats = librosa.beat.beat_track(y)
-'''
+"""
 
 import inspect
 import os
-import six
 import types
 
 import functools
 
-from .version import version as __version__
+
+short_version = '1.0'
+version = '1.0.0'
+__version__ = version
+
 
 class Preset(object):
-    '''The Preset class overrides the default parameters of functions within a module.
+    """The Preset class overrides the default parameters of functions \
+    within a module.
 
-    If the given module contains submodules, these are also encapsulated by Preset objects
-    that share the same default parameter dictionary.
+    If the given module contains submodules, these are also encapsulated by
+    Preset objects that share the same default parameter dictionary.
 
-    Submodules are detected by examining common prefixes of the module source paths.
+    Submodules are detected by examining common prefixes of the module
+    source paths.
 
     Attributes
     ----------
@@ -51,29 +57,25 @@ class Preset(object):
     defaults : None or dictionary
         An existing dictionary object used to collect default parameters.
         Note: this will be passed by reference.
-    '''
+    """
 
     def __wrap(self, func):
-        '''This decorator overrides the default arguments of a function.
+        """Override the default arguments of a function.
 
         For each keyword argument in the function, the decorator first checks
-        if the argument has been overridden by the caller, and uses that value instead if so.
+        if the argument has been overridden by the caller, and uses that value
+        instead if so.
 
         If not, the decorator consults the Preset object for an override value.
 
-        If both of the above cases fail, the decorator reverts to the function's native
-        default parameter value.
-        '''
+        If both of the above cases fail, the decorator reverts to the
+        function's native default parameter value.
+        """
 
         def deffunc(*args, **kwargs):
-            '''The decorated function'''
+            """Decorate the given function."""
             # Get the list of function arguments
-            if hasattr(inspect, 'signature'):
-                # Python 3.5
-                function_args = inspect.signature(func).parameters
-
-            else:
-                function_args = inspect.getargspec(func).args
+            function_args = inspect.signature(func).parameters
 
             # Construct a dict of those kwargs which appear in the function
             filtered_kwargs = kwargs.copy()
@@ -89,19 +91,20 @@ class Preset(object):
                     # Do we have a clobbering value in the default dict?
                     filtered_kwargs[param] = self._defaults[param]
 
-            # Call the function with the supplied args and the filtered kwarg dict
+            # Call with the supplied args and the filtered kwarg dict
             return func(*args, **filtered_kwargs)  # pylint: disable=W0142
 
         wrapped = functools.update_wrapper(deffunc, func)
 
         # force-mangle the docstring here
-        wrapped.__doc__ = ('WARNING: this function has been modified by the Presets '
-                           'package.\nDefault parameter values described in the '
-                           'documentation below may be inaccurate.\n\n{}'.format(wrapped.__doc__))
+        wrapped.__doc__ = (
+            'WARNING: this function has been modified by the Presets '
+            'package.\nDefault parameter values described in the '
+            f'documentation below may be inaccurate.\n\n{wrapped.__doc__}')
         return wrapped
 
     def __init__(self, module, dispatch=None, defaults=None):
-
+        """Initialize Preset object around a given module."""
         # This defaults directory will get passed around by reference
         if defaults is None:
             defaults = dict()
@@ -122,7 +125,7 @@ class Preset(object):
         for attr, value in inspect.getmembers(module):
 
             # If it's a function, wrap it
-            if six.callable(value):
+            if callable(value):
                 # Wrap the function in a decorator
                 wrapped = self.__wrap(value)
 
@@ -149,21 +152,25 @@ class Preset(object):
                     setattr(self, attr, value)
 
     def __getitem__(self, param):
+        """Implement dictionary interface (get) to presets object."""
         return self._defaults[param]
 
     def __delitem__(self, param):
+        """Implement dictionary interface (del) to presets object."""
         del self._defaults[param]
 
     def __contains__(self, param):
+        """Implement dictionary interface (in) to presets object."""
         return param in self._defaults
 
     def __setitem__(self, param, value):
+        """Implement dictionary interface (set) to presets object."""
         self._defaults[param] = value
 
     def keys(self):
-        '''Returns a list of currently set parameter defaults'''
+        """Return a list of currently set parameter defaults."""
         return self._defaults.keys()
 
     def update(self, D):
-        '''Updates the default parameter set by a dictionary D'''
+        """Update the default parameter set with the provided dictionary D."""
         self._defaults.update(D)
