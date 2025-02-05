@@ -1,6 +1,4 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Version info"""
+"""Submodule to contain version information."""
 
-short_version = '1.0'
-version = '1.0.0'
