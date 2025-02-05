@@ -1,7 +1,7 @@
 Changes
 =======
 
-v0.2.0
+v1.0.0
 ------
 - Removed support for python < 3.8
 - Modernized to support python 3.13
