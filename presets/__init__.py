@@ -24,20 +24,22 @@ This example shows how to override common default parameters in the librosa pack
 
 import inspect
 import os
-import six
 import types
 
 import functools
 
 from .version import version as __version__
 
+
 class Preset(object):
-    '''The Preset class overrides the default parameters of functions within a module.
+    '''The Preset class overrides the default parameters of functions within
+    a module.
 
-    If the given module contains submodules, these are also encapsulated by Preset objects
-    that share the same default parameter dictionary.
+    If the given module contains submodules, these are also encapsulated by
+    Preset objects that share the same default parameter dictionary.
 
-    Submodules are detected by examining common prefixes of the module source paths.
+    Submodules are detected by examining common prefixes of the module
+    source paths.
 
     Attributes
     ----------
@@ -57,23 +59,19 @@ class Preset(object):
         '''This decorator overrides the default arguments of a function.
 
         For each keyword argument in the function, the decorator first checks
-        if the argument has been overridden by the caller, and uses that value instead if so.
+        if the argument has been overridden by the caller, and uses that value
+        instead if so.
 
         If not, the decorator consults the Preset object for an override value.
 
-        If both of the above cases fail, the decorator reverts to the function's native
-        default parameter value.
+        If both of the above cases fail, the decorator reverts to the
+        function's native default parameter value.
         '''
 
         def deffunc(*args, **kwargs):
             '''The decorated function'''
             # Get the list of function arguments
-            if hasattr(inspect, 'signature'):
-                # Python 3.5
-                function_args = inspect.signature(func).parameters
-
-            else:
-                function_args = inspect.getargspec(func).args
+            function_args = inspect.signature(func).parameters
 
             # Construct a dict of those kwargs which appear in the function
             filtered_kwargs = kwargs.copy()
@@ -89,7 +87,7 @@ class Preset(object):
                     # Do we have a clobbering value in the default dict?
                     filtered_kwargs[param] = self._defaults[param]
 
-            # Call the function with the supplied args and the filtered kwarg dict
+            # Call with the supplied args and the filtered kwarg dict
             return func(*args, **filtered_kwargs)  # pylint: disable=W0142
 
         wrapped = functools.update_wrapper(deffunc, func)
@@ -97,7 +95,7 @@ class Preset(object):
         # force-mangle the docstring here
         wrapped.__doc__ = ('WARNING: this function has been modified by the Presets '
                            'package.\nDefault parameter values described in the '
-                           'documentation below may be inaccurate.\n\n{}'.format(wrapped.__doc__))
+                           f'documentation below may be inaccurate.\n\n{wrapped.__doc__}')
         return wrapped
 
     def __init__(self, module, dispatch=None, defaults=None):
@@ -122,7 +120,7 @@ class Preset(object):
         for attr, value in inspect.getmembers(module):
 
             # If it's a function, wrap it
-            if six.callable(value):
+            if callable(value):
                 # Wrap the function in a decorator
                 wrapped = self.__wrap(value)
 
