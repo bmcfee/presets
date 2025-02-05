@@ -104,7 +104,7 @@ class Preset(object):
         return wrapped
 
     def __init__(self, module, dispatch=None, defaults=None):
-
+        """Initialize Preset object around a given module."""
         # This defaults directory will get passed around by reference
         if defaults is None:
             defaults = dict()
@@ -152,15 +152,19 @@ class Preset(object):
                     setattr(self, attr, value)
 
     def __getitem__(self, param):
+        """Implement dictionary interface (get) to presets object."""
         return self._defaults[param]
 
     def __delitem__(self, param):
+        """Implement dictionary interface (del) to presets object."""
         del self._defaults[param]
 
     def __contains__(self, param):
+        """Implement dictionary interface (in) to presets object."""
         return param in self._defaults
 
     def __setitem__(self, param, value):
+        """Implement dictionary interface (set) to presets object."""
         self._defaults[param] = value
 
     def keys(self):
